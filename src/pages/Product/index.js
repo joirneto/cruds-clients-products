@@ -2,41 +2,44 @@ import {React, useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
-import logo from '../../../src/logo.png'
+import excluir from '../../../src/excluir.png'
 import edit from '../../../src/edit.png'
 import Table from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import swal from 'sweetalert';
 
 
 export default function Product(){
   const [nome, setNome] = useState('');
   const [categoria, setCategoria] = useState('');
+  const [quantidade, setQuantidade] = useState('');
   const [preco, setPreco] = useState('');
+  const [imagem, setImagem] = useState('');
   let lista = JSON.parse(localStorage.getItem('product')) ? JSON.parse(localStorage.getItem('product')): [];
   const history = useHistory();
   
- useEffect(()=>{
-    
-  },[]);
-
+  
   const data = {
     id: uuidv4(),
     nome,
     categoria,
-    preco 
+    quantidade,
+    preco,
+    imagem 
   }
 
   function handleAdicionar(){
-    if(validator(nome, categoria, preco)){
+    if(validator(nome, categoria, quantidade, preco)){
       if(validatorNum(preco)){
         if(localStorage.getItem('product') === null){
           localStorage.setItem('product', JSON.stringify([data]));
           setNome('');
           setCategoria('');
+          setQuantidade('');
           setPreco('');
+          setImagem('');
           history.push('/product');
         }
         else{
@@ -49,39 +52,61 @@ export default function Product(){
             );
             setNome('');
             setCategoria('');
+            setQuantidade('');
             setPreco('');
+            setImagem('');
             history.push('/product');
+          
         }
       }
     }
   }
 
-  function validator(nome,categoria,preco){
-    if((nome !== null && nome !== '') && (categoria !== null && categoria !== '') && (preco !== null && preco !== '')){
+  function validator(nome,categoria, quantidade, preco){
+    if((nome !== null && nome !== '') &&
+     (categoria !== null && categoria !== '')
+      && (quantidade !== null && quantidade !== '')
+      && (preco !== null && preco !== '')){
       return true;
     }
     else{
-     alert("Prencha todos os campos solicitados!") ;
+      swal('Prencha todos os campos solicitados!');
+      
     }
   }
 
   function validatorNum(preco){
-    if(!isNaN(preco)){
+    if(!isNaN(preco) && !isNaN(quantidade)){
       return true;
     }
     else{
-     alert("Campo preco deve ser um numero!") ;
+      swal('Campo preco e quantidade devem ser um numero!');
     }
   }
 
-  function excluirProd(id){
-    console.log(id);
+  function editarProd(id){
     let lista = JSON.parse(localStorage.getItem('product'));
-    let index = lista.indexOf(id);
-    lista.splice(index,1);
-    localStorage.setItem('product', JSON.stringify(lista));
-    history.push('/product');
+    let element = lista.find(element => element.id === id);
+    localStorage.setItem('edit', JSON.stringify(element));
+    history.push('/edit-product');
+    
+ }
 
+
+  function excluirProd(produto){
+
+    let index;
+    let produtos = JSON.parse(localStorage.getItem('product'));
+    for(let i=0; i<produtos.length;i++){
+      if(produtos[i].id === produto.id){
+        index = i;
+      }
+    }
+   
+ 
+     lista.splice(index,1);
+     localStorage.setItem('product', JSON.stringify(lista));
+     history.push('/product');
   }
 
 
@@ -107,8 +132,13 @@ export default function Product(){
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>NOME</th>
-            <th>DESCRICAO</th>
+            <th>NOME DO PRODUTO</th>
+            <th>CATEGORIA</th>
+            <th>QUANTIDADE</th>
+            <th>PREÇO UNITÁRIO</th>
+            <th>IMAGEM PRODUTO</th>
+            <th>EDITAR PRODUTO</th>
+            <th>EXCLUIR PRODUTO</th>
           </tr>
         </thead>
         <tbody>
@@ -118,21 +148,25 @@ export default function Product(){
                 <tr key={`${product.id}`}>
                   <td >{product.nome}</td>
                   <td >{product.categoria}</td>
+                  <td >{product.quantidade}</td>
                   <td >{product.preco}</td>
-                  <td><img src={edit} alt="Excluir" width="40" title="Excluir" onClick = {e => excluirProd(product.id)} /></td>
-                  <td><img src="https://static-cse.canva.com/blob/183497/Canva-Photographer-Works-with-His-DSLR-Camera.c54ca40f.jpg" alt="Excluir" width="40"  /></td>
+                  <td><img src={product.imagem} alt="Imagem" width="40" title="Imagem" /></td>
+                  <td><img src={edit} alt="Editar" width="60" title="Editar" onClick = {e => editarProd(product.id)} /></td>
+                  <td><img src={excluir} alt="Excluir" width="40" title="Excluir" onClick = {e => excluirProd(product)} /></td>
                 </tr>
               )
            })
           }
         </tbody>
       </Table>
-      <h2>Adicionar Produto</h2>
+      <h3>Adicionar Produto</h3>
       <form>
         <input type="text" placeholder="Nome do Produto" id="name" value = {nome} onChange = {e => setNome(e.target.value)}></input>
         <input type="text" placeholder="Categoria" id="categoria" value = {categoria} onChange = {e => setCategoria(e.target.value)}></input>
-        <input type="text" placeholder="Preço Unitário" id="preco" value = {preco} onChange = {e => setPreco(e.target.value)}></input>
-        <button type='button' onClick={handleAdicionar}>ADICIONAR</button>
+        <input type="text" placeholder="Quantidade" id="quantidade" value = {quantidade} onChange = {e => setQuantidade(e.target.value)}></input>
+        <input type="text" placeholder="Preço Unitário" id="preco" value = {preco} onChange = {e => setPreco(e.target.value.replace(",","."))}></input>
+        <input type="text" placeholder="Link da Imagem" id="imagem" value = {imagem} onChange = {e => setImagem(e.target.value)}></input>
+        <div className="botaoAdd"><button type='button' onClick={handleAdicionar}>ADICIONAR</button></div>
       </form>
     </main>
     </Col>
@@ -145,5 +179,3 @@ export default function Product(){
   )
 }
 
-//<img src={logo} width="20" height="20" alt="" title="Excluir" />
-//

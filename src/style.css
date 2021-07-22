@@ -19,8 +19,14 @@ header{
 
 .colP{
   background-color: black;
-  margin-left: 20px;
-  
+  margin-left: 20px; 
+}
+
+h3{
+  margin: 30px;
+}
+.botaoAdd{
+  margin-top: 10px;
 }
 
 footer{
