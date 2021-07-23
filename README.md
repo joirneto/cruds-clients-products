@@ -4,7 +4,7 @@ Aplicação que realiza CRUD para Produtos e Clientes.
 
 ## Início
 
-Módulo de estudos: React + React Router Dom 
+Módulo de estudos: React + React Router Dom + Persistência de dados em LocalStorage
 
 ### Pré-requisitos:
 
