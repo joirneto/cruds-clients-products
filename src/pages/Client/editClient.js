@@ -9,41 +9,37 @@ import logohc from '../../../src/hiring-coders-logo.png'
 
 
 
-export default function EditProduct(){
-  const element = JSON.parse(localStorage.getItem('edit')) ? JSON.parse(localStorage.getItem('edit')): [];
-  const produtos = JSON.parse(localStorage.getItem('product')) ? JSON.parse(localStorage.getItem('product')): [];
+export default function EditClient(){
+  const element = JSON.parse(localStorage.getItem('editClient')) ? JSON.parse(localStorage.getItem('editClient')): [];
+  const clientes = JSON.parse(localStorage.getItem('client')) ? JSON.parse(localStorage.getItem('client')): [];
   const [id, setId] = useState(element.id)
   const [nome, setNome] = useState(element.nome);
-  const [categoria, setCategoria] = useState(element.categoria);
-  const [quantidade, setQuantidade] = useState(element.quantidade);
-  const [preco, setPreco] = useState(element.preco);
-  const [imagem, setImagem] = useState(element.imagem);
+  const [email, setEmail] = useState(element.email);
+  const [endereco, setEndereco] = useState(element.endereco);
   const history = useHistory();
 
   const data = {
     id,
     nome,
-    categoria,
-    quantidade,
-    preco,
-    imagem 
+    email,
+    endereco
   }
 
   function handleEditar(){
-    if(validator(nome, categoria, quantidade, preco)){
-      if(validatorNum(preco)){
+    if(validator(nome, email, endereco)){
+      
         let index;
-        for(let i=0; i<produtos.length;i++){
-          if(produtos[i].id === element.id){
+        for(let i=0; i<clientes.length;i++){
+          if(clientes[i].id === element.id){
             index = i;
           }
         }
-        produtos[index] = data;
-        localStorage.setItem('product', JSON.stringify(produtos));
-        localStorage.setItem('edit', '');
-        history.push('/product');
+        clientes[index] = data;
+        localStorage.setItem('client', JSON.stringify(clientes));
+        localStorage.setItem('editClient', '');
+        history.push('/client');
 
-      }
+      
     }
   }
 
@@ -59,16 +55,6 @@ export default function EditProduct(){
       
     }
   }
-
-  function validatorNum(preco){
-    if(!isNaN(preco) && !isNaN(quantidade)){
-      return true;
-    }
-    else{
-      swal('Campo preco e quantidade devem ser um numero!');
-    }
-  }
-
 
   return(
     
@@ -90,13 +76,11 @@ export default function EditProduct(){
     </Col>
     <Col xs={8} >
     <main>
-      <h1>EDITAR PRODUTO</h1>
+      <h1>EDITAR CLIENTE</h1>
       <form>
-        <input type="text" placeholder="Nome do Produto" id="name" value = {nome} onChange = {e => setNome(e.target.value)}></input>
-        <input type="text" placeholder="Categoria" id="categoria" value = {categoria} onChange = {e => setCategoria(e.target.value)}></input>
-        <input type="text" placeholder="Quantidade" id="quantidade" value = {quantidade} onChange = {e => setQuantidade(e.target.value)}></input>
-        <input type="text" placeholder="Preço Unitário" id="preco" value = {preco} onChange = {e => setPreco(e.target.value.replace(",","."))}></input>
-        <input type="text" placeholder="Link da Imagem" id="imagem" value = {imagem} onChange = {e => setImagem(e.target.value)}></input>
+        <input type="text" placeholder="Nome" id="name" value = {nome} onChange = {e => setNome(e.target.value)}></input>
+        <input type="email" placeholder="Email" id="email" value = {email} onChange = {e => setEmail(e.target.value)}></input>
+        <input type="text" placeholder="Endereco" id="endereco" value = {endereco} onChange = {e => setEndereco(e.target.value)}></input>
         <div className="botaoAdd"><button type='button' onClick={handleEditar}>CONFIRMAR EDIÇÃO</button></div>
       </form>
     </main>

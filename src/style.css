@@ -1,25 +1,26 @@
-html{
-  
-}
-body{
-
-
-}
-
-.Container{
-  
-}
 
 header{
-  background-color: aquamarine;
+  background-color: #044BD9;
   width: 100%;
-  height: 50px;
   margin-bottom: 20px;
+  color: #ffffff;
+  padding: 10px;
+  text-align: center;
 }
 
 .colP{
-  background-color: black;
-  margin-left: 20px; 
+  background-color: #0476D9;
+  margin-left: 10px; 
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.t-principal{
+  text-align: center;
+  padding: 20px;
+  margin-left: 12%;
 }
 
 h3{
@@ -29,12 +30,19 @@ h3{
   margin-top: 10px;
 }
 
+
 footer{
-  background-color: aquamarine;
-  width: 100%;
-  height: 50px;
   margin-top: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction:column;
+  color: #ffffff;
+  justify-content: center;
+  align-items: center;  
+  background-color: #044BD9;
+}
 
-
-  
+.link-ref{
+  text-decoration: none;
+  color: #ffffff;
 }
